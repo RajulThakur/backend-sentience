@@ -10,7 +10,7 @@ app = FastAPI()
 origins = [
     "http://localhost",
     "http://localhost:3000",
-    "https://sentimentq-app.vercel.app"
+    "https://sentienceq.vercel.app",
 ]
 
 app.add_middleware(
