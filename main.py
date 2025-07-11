@@ -3,16 +3,30 @@ from fastapi import FastAPI
 from google import genai
 from pydantic import BaseModel
 from dotenv import load_dotenv
+from fastapi.middleware.cors import CORSMiddleware
+
 load_dotenv() 
 app = FastAPI()
+origins = [
+    "http://localhost",
+    "http://localhost:3000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class Emotion(BaseModel):
     emotion: str
     percent: int
     words: list[str]
+
 class Analysis(BaseModel):
     emotions: list[Emotion]
-    percent: list[int]
     confidence: int
     accuracy: int
 
@@ -38,5 +52,4 @@ async def sentiment_analysis(request: SentimentRequest):
             "response_schema": list[Analysis],
         },
     )
-    print(response.text)
-    return {"response": response.parsed}
+    return response.parsed
